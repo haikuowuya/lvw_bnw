@@ -1,0 +1,66 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF000000"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="裁剪图片"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:padding="16dp"
+            android:id="@+id/iv_menu"
+            android:src="@drawable/ic_crop_menu"/>
+    </RelativeLayout>
+
+    <cn.com.bluemoon.cardocr.CropImageView
+        android:id="@+id/crop_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_weight="1"
+        android:paddingBottom="64dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="32dp"
+        custom:backgroundColor="#C8000000"
+        custom:cropMode="ratio_fit_image"
+        custom:frameColor="#FF86C166"
+        custom:frameStrokeWeight="1dp"
+        custom:guideColor="#AA86C166"
+        custom:guideShowMode="show_on_touch"
+        custom:guideStrokeWeight="1dp"
+        custom:handleColor="#FF86C166"
+        custom:handleShowMode="show_always"
+        custom:handleSize="8dp"
+        custom:minFrameSize="50dp"
+        custom:overlayColor="#AA1C1C1C"
+        custom:touchPadding="8dp"/>
+
+
+    <ImageView
+        android:id="@+id/iv_crop"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_circle_background"
+        android:padding="10dp"
+        android:src="@drawable/ic_crop"/>
+
+
+</LinearLayout>

@@ -1,0 +1,58 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Activity.Style</item>
+    </style>
+    <style name="Animation.Activity.Style" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/base_slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/base_stay_orig</item>
+        <item name="android:activityCloseEnterAnimation">@anim/base_stay_orig</item>
+        <item name="android:activityCloseExitAnimation">@anim/base_slide_right_out</item>
+        <item name="android:taskOpenEnterAnimation">@anim/base_slide_right_in</item>
+        <item name="android:taskOpenExitAnimation">@anim/base_stay_orig</item>
+        <item name="android:taskCloseEnterAnimation">@anim/base_stay_orig</item>
+        <item name="android:taskCloseExitAnimation">@anim/base_slide_right_out</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/base_slide_right_in</item>
+        <item name="android:taskToFrontExitAnimation">@anim/base_stay_orig</item>
+        <item name="android:taskToBackEnterAnimation">@anim/base_stay_orig</item>
+        <item name="android:taskToBackExitAnimation">@anim/base_slide_right_out</item>
+        <item name="android:fragmentOpenEnterAnimation">@anim/base_slide_right_in</item>
+        <item name="android:fragmentOpenExitAnimation">@anim/base_stay_orig</item>
+        <item name="android:fragmentCloseEnterAnimation">@anim/base_stay_orig</item>
+        <item name="android:fragmentCloseExitAnimation">@anim/base_slide_right_out</item>
+
+    </style>
+    <style name="clickItemBackground">
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/selector_action_click_background</item>
+    </style>
+
+
+
+    <!--通用的标签类型 textView的样式[字体大小为14sp ]-->
+    <style name="labelTextViewStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <!--通用的textView的样式[字体大小为14sp 字体颜色为 blackA ]-->
+    <style name="blackTextViewStyle" parent="labelTextViewStyle">
+        <item name="android:textColor">@color/color_text</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="greyTextViewStyle" parent="labelTextViewStyle">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+
+
+</resources>
