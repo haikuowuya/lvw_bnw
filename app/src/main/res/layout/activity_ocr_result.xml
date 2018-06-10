@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="blocksDescendants"
@@ -8,83 +9,44 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        android:paddingBottom="30dp"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <TextView
-            android:id="@+id/tv_image"
-            android:layout_width="240dp"
-            android:layout_height="wrap_content"
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
-            android:padding="10dp"
-            android:text="查看图片"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="地址：" />
-
-            <EditText
-                android:id="@+id/et_address"
+            <RadioButton
+                android:id="@+id/rb_mt"
                 style="@style/blackTextViewStyle"
-                android:layout_width="match_parent"
-                android:singleLine="false"
-                android:layout_height="match_parent"
-                android:hint="kk" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="姓名：" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="40dp"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="美团" />
 
-            <EditText
-                android:id="@+id/et_name"
+            <RadioButton
+                android:id="@+id/rb_elm"
                 style="@style/blackTextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="电话：" />
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:layout_weight="1"
+                android:text="饿了么" />
+        </RadioGroup>
 
-            <EditText
-                android:id="@+id/et_phone"
-                style="@style/blackTextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -107,37 +69,75 @@
                 android:hint="请输入订单编号" />
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/radio_group"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="64dp"
+
             android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp">
+            android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/rb_mt"
-                style="@style/blackTextViewStyle"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:text="美团" />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="姓名：" />
 
-            <RadioButton
-                android:id="@+id/rb_elm"
+            <EditText
+                android:id="@+id/et_name"
                 style="@style/blackTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="请手动输入姓名" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="饿了么" />
-        </RadioGroup>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="电话：" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                style="@style/blackTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="请手动输入电话" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:gravity="center|top"
+                android:text="地址：" />
+
+            <EditText
+                android:id="@+id/et_address"
+                style="@style/blackTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="请手动输入地址"
+                android:singleLine="false"
+                tools:hint="请手动输入地址\n请手动输入地址\n请手动输入地址\n请手动输入地址" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_save"
-            android:layout_width="250dp"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"

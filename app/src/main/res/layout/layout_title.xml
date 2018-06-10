@@ -3,16 +3,18 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/ll_title"
     android:orientation="vertical"
     tools:layout_gravity="center">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:background="@color/colorAccent">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -20,7 +22,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="4dp"
-            android:layout_marginTop="4dp"
             android:padding="12dp"
             android:src="@drawable/ic_back" />
 
@@ -32,7 +33,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:singleLine="true"
-            android:textSize="16sp"
+            android:textSize="15sp"
             tools:text="企业背景调查分析" />
 
         <ImageView
@@ -40,12 +41,14 @@
             style="@style/clickItemBackground"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
             android:padding="12dp"
+            android:src="@drawable/ic_image"
+            android:tint="@color/color_666666"
             android:visibility="invisible"
-            android:src="@drawable/ic_back" />
+            tools:visibility="visible" />
     </LinearLayout>
+
     <include layout="@layout/layout_view_line" />
 </LinearLayout>
 

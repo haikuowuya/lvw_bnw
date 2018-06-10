@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -29,6 +30,8 @@ public abstract class BaseTitleActivity extends BaseActivity {
 
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    @BindView(R.id.iv_share)
+    ImageView mIvShare;
     @BindView(R.id.ll_title)
     ViewGroup mLlTitle;
 
@@ -50,7 +53,12 @@ public abstract class BaseTitleActivity extends BaseActivity {
         onBackPressed();
     }
 
-
+    public  void customIvShare(int resId, View.OnClickListener onClickListener)
+    {
+        mIvShare.setVisibility(View.VISIBLE);
+        mIvShare.setImageResource(resId);
+        mIvShare.setOnClickListener(onClickListener);
+    }
     public  void hideTitle()
     {
         mLlTitle.setVisibility(View.GONE);
