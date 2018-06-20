@@ -3,9 +3,11 @@ package cn.com.bluemoon.cardocr;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.com.bluemoon.cardocr.lib.bean.OcrItem;
 import cn.com.bluemoon.cardocr.lib.bean.TextOcrItem;
+import cn.com.bluemoon.cardocr.lib.common.YTServerAPI;
 import cn.com.bluemoon.cardocr.lib.utils.GsonUtils;
 
 public class OcrResultActivity extends BaseTitleActivity {
@@ -61,25 +64,49 @@ public class OcrResultActivity extends BaseTitleActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        customIvShare(R.mipmap.ic_launcher, v -> ImageActivity.actionImage(mActivity, getIntent().getStringExtra(EXTRA_PATH)));
-        String json = getIntent().getStringExtra(EXTRA_JSON);
-        textOcrItem = GsonUtils.jsonToClass(json, TextOcrItem.class);
-        if (null != textOcrItem) {
-            handleTextOcr();
-            if (textOcrItem.items != null && textOcrItem.items.size() > 2) {
-                mEtAddress.setText(mHashMap.get(KEY_ADDRESS));
-                mEtAddress.setSelection(mEtAddress.getText().length());
-                mEtName.setText(mHashMap.get(KEY_NAME));
-                mEtName.setSelection(mEtName.getText().length());
-                mEtPhone.setText(mHashMap.get(KEY_PHONE));
-                mEtPhone.setSelection(mEtPhone.getText().length());
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+    private  void handleIntent(Intent intent)
+    {
+        if(null != intent) {
+            customIvShare(R.drawable.ic_image, v -> ImageActivity.actionImage(mActivity, intent.getStringExtra(EXTRA_PATH)));
+            String json = intent.getStringExtra(EXTRA_JSON);
+            textOcrItem = GsonUtils.jsonToClass(json, TextOcrItem.class);
+            if (null != textOcrItem) {
+                handleTextOcr();
+                if (textOcrItem.items != null && textOcrItem.items.size() > 2) {
+                    mEtAddress.setText(mHashMap.get(KEY_ADDRESS));
+                    mEtAddress.setSelection(mEtAddress.getText().length());
+                    mEtName.setText(mHashMap.get(KEY_NAME));
+                    mEtName.setSelection(mEtName.getText().length());
+                    mEtPhone.setText(mHashMap.get(KEY_PHONE));
+                    mEtPhone.setSelection(mEtPhone.getText().length());
+                }
             }
         }
     }
 
+    private  boolean mIsContinue = false;
+    @OnClick(R.id.tv_save_continue)
+    public void onSaveContinueClick() {
+        mIsContinue = true;
+        new Thread() {
+            @Override
+            public void run() {
+                doSaveInfo();
+            }
+        }.start();
+    }
 
     @OnClick(R.id.tv_save)
     public void onSaveClick() {
+        mIsContinue = false;
         new Thread() {
             @Override
             public void run() {
@@ -120,11 +147,21 @@ public class OcrResultActivity extends BaseTitleActivity {
                 JSONObject jsonObject = new JSONObject(responseBuffer.toString());
                 if (null != jsonObject) {
                     String msg = jsonObject.optString("msg");
-                    Looper.prepare();
-                    Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
-                    Looper.loop();
+                    boolean isSuccess = jsonObject.optBoolean("success",false);
+                    if(isSuccess) {
+                        Looper.prepare();
+                        Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+                        mActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (mIsContinue) {
+                                    PhotoUtils.selectPicFromCamera(mActivity);
+                                }
+                            }
+                        });
+                        Looper.loop();
+                    }
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,6 +177,56 @@ public class OcrResultActivity extends BaseTitleActivity {
     public String pageTitle() {
         return "识别结果";
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("requestCode = " + requestCode + " resultCode = " + resultCode + " data = " + data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PhotoUtils.REQUEST_FROM_PHOTO || requestCode == PhotoUtils.REQUEST_FROM_CAMERA) {
+                PhotoUtils.onActivityResult(this, requestCode, resultCode, data);
+            } else if (requestCode == PhotoUtils.REQUEST_FROM_CROP) {
+                String croppedImagePath = PhotoUtils.getFinalCropImagePath(this, data.getData());
+                System.out.println("croppedImagePath = " + croppedImagePath);
+                if (!TextUtils.isEmpty(croppedImagePath)) {
+                    identification(croppedImagePath);
+                }
+            }
+        }
+    }
+
+    private void identification(final String imageFilePath) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    byte[] bytes = FileUtils.FileToByte(imageFilePath);
+                    String fileData = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    YTServerAPI serverAPI = new YTServerAPI(OcrResultActivity.this);
+                    serverAPI.setRequestListener(new YTServerAPI.OnRequestListener() {
+                        @Override
+                        public void onSuccess(int statusCode, final String responseBody) {
+                            new Handler(getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    OcrResultActivity.actionOcrResult(OcrResultActivity.this, imageFilePath, responseBody);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode) {
+
+                        }
+                    });
+                    serverAPI.textOcr(fileData);
+                } catch (Exception e) {
+                }
+            }
+        }.start();
+    }
+
 
     private void handleTextOcr() {
         if (null != textOcrItem) {
@@ -174,12 +261,9 @@ public class OcrResultActivity extends BaseTitleActivity {
                         StringBuilder stringBuilder = new StringBuilder();
                         for (OcrItem ocrItem : tmpOcrItems) {
                             stringBuilder.append(ocrItem.itemstring);
-                            stringBuilder.append("\n");
                         }
-                        String resultAddress = "";
-                        if (stringBuilder.length() > "\n".length()) {
-                            resultAddress = stringBuilder.substring(0, stringBuilder.length() - "\n".length());
-                        }
+                        String resultAddress =stringBuilder.toString();
+
                         mHashMap.put(KEY_ADDRESS, resultAddress);
                     }
                 }

@@ -34,6 +34,7 @@
         <activity android:name=".CropActivity"/>
         <activity android:name=".OcrResultActivity"
             android:windowSoftInputMode="adjustResize"
+            android:launchMode="singleTop"
             />
         <activity android:name=".ImageActivity" />
     </application>
